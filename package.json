@@ -46,9 +46,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/OllieJT/loadup-pages-app"
+		"url": "https://github.com/OllieJT/olliejt-starter-sapper"
 	},
 	"bugs": {
-		"url": "https://github.com/OllieJT/loadup-pages-app/issues"
+		"url": "https://github.com/OllieJT/olliejt-starter-sapper/issues"
 	}
 }
