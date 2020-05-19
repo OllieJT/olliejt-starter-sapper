@@ -1,0 +1,139 @@
+//	==========
+//	BREAKPOINTS
+//	==========
+$desktop_large: 1400px;
+$desktop_small: 1150px;
+
+$tablet_large: 960px;
+$tablet_small: 800px;
+
+$phone_large: 600px;
+$phone_small: 475px;
+
+//	==========
+//	UTILITY
+//	==========
+@mixin Constrain($width: 1200px) {
+	width: 100%;
+	height: auto;
+	max-width: $width;
+	margin-left: auto;
+	margin-right: auto;
+}
+@mixin Shadow($elevation: 8px) {
+	/* 	$movement: $elevation;
+	$size: $elevation;
+
+	transition: all 1.2s var(--transition-primary);
+	cursor: pointer;
+
+	box-shadow: 0px ($movement / 2) ($size / 1) calc($size * -2) hsla(230, 30%, 40%, 0.3),
+		0px ($movement * 1) ($size * 2) calc($size * -2) hsla(230, 30%, 40%, 0.05),
+		0px ($movement * 3) ($size * 3) calc($size * -2) hsla(230, 30%, 40%, 0),
+		0px ($movement * 4) ($size * 8) calc($size * -2) hsla(230, 30%, 20%, 0);
+
+	&:hover {
+		box-shadow: 0px ($movement * 0) ($size * 2) hsla(230, 30%, 40%, 0.1),
+			0px ($movement * 0.5) ($size * 3) hsla(230, 30%, 30%, 0.15),
+			0px ($movement * 1) ($size * 5) hsla(230, 30%, 20%, 0.2),
+			0px ($movement * 1.5) ($size * 8) hsla(230, 30%, 20%, 0.1);
+	} */
+	$shdw-scale: $elevation * -2.5;
+
+	$shdw-lvl_1_m: $elevation * 0.425;
+	$shdw-lvl_2_m: $elevation * 1.425;
+	$shdw-lvl_3_m: $elevation * 3.4;
+	$shdw-lvl_4_m: $elevation * 6.288;
+	$shdw-lvl_5_m: $elevation * 7.5;
+
+	$shdw-lvl_1_b: $elevation * 0.337;
+	$shdw-lvl_2_b: $elevation * 0.86;
+	$shdw-lvl_3_b: $elevation * 1.775;
+	$shdw-lvl_4_b: $elevation * 3.65;
+	$shdw-lvl_5_b: $elevation * 10;
+
+	$shdw-lvl_1_o: 0.04;
+	$shdw-lvl_2_o: 0.06;
+	$shdw-lvl_3_o: 0.07;
+	$shdw-lvl_4_o: 0.09;
+	$shdw-lvl_5_o: 0.13;
+
+	box-shadow: 0px $shdw-lvl_1_m $shdw-lvl_1_b $shdw-scale hsla(204, 20%, 5%, $shdw-lvl_1_o),
+		0px $shdw-lvl_2_m $shdw-lvl_2_b $shdw-scale hsla(204, 20%, 5%, $shdw-lvl_2_o),
+		0px $shdw-lvl_3_m $shdw-lvl_3_b $shdw-scale hsla(204, 20%, 5%, $shdw-lvl_3_o),
+		0px $shdw-lvl_4_m $shdw-lvl_4_b $shdw-scale hsla(204, 20%, 5%, $shdw-lvl_4_o),
+		0px $shdw-lvl_5_m $shdw-lvl_5_b $shdw-scale hsla(204, 20%, 5%, $shdw-lvl_5_o);
+
+	&:hover {
+		$shdw-lvl_1_o: 1;
+		$shdw-lvl_2_o: 1;
+		$shdw-lvl_3_o: 1;
+		$shdw-lvl_4_o: 1;
+		$shdw-lvl_5_o: 1;
+	}
+}
+@mixin DarkMode() {
+	--color-content-high: var(--color-mono-10);
+	--color-content-middle: var(--color-mono-8);
+	--color-content-low: var(--color-mono-6);
+
+	--color-level-higher: var(--color-mono-5);
+	--color-level-high: var(--color-mono-4);
+	--color-level-middle: var(--color-mono-3);
+	--color-level-low: var(--color-mono-2);
+	--color-level-lower: var(--color-mono-1);
+	--color-level-bottom: var(--color-mono-0);
+	--color-level-mask: var(--color-mono-low-mask);
+}
+
+//	==========
+//	TYPOGRAPHY
+//	==========
+@mixin LargeTitle($height: 0.9, $color: var(--color-content-high)) {
+	font-size: 5.6rem;
+	letter-spacing: -0.01em;
+	line-height: $height;
+	font-weight: var(--font-weight-bold);
+	color: $color;
+}
+@mixin SmallTitle($height: 1, $color: var(--color-content-high)) {
+	font-size: 4rem;
+	font-weight: var(--font-weight-bold);
+	line-height: $height;
+	color: $color;
+	letter-spacing: -0.008em;
+}
+@mixin LargeSubtitle($height: 1, $color: var(--color-content-middle)) {
+	font-size: 4rem;
+	font-weight: var(--font-weight-medium);
+	line-height: $height;
+	color: $color;
+	letter-spacing: -0.02em;
+}
+@mixin SmallSubtitle($height: 1.1, $color: var(--color-content-middle)) {
+	font-size: 2.8rem;
+	line-height: $height;
+	font-weight: var(--font-weight-medium);
+	color: $color;
+}
+@mixin Headline($height: 1.1, $color: var(--color-content-high)) {
+	font-size: 2.4rem;
+	font-weight: var(--font-weight-medium);
+	line-height: $height;
+	color: $color;
+	letter-spacing: 0.005em;
+}
+@mixin Label($height: 1, $color: var(--color-content-low)) {
+	font-size: 1.4rem;
+	font-weight: var(--font-weight-medium);
+	line-height: $height;
+	color: $color;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+@mixin Content($height: 1.5, $color: var(--color-content-middle)) {
+	font-size: 2.4rem;
+	font-weight: var(--font-weight-regular);
+	line-height: $height;
+	color: $color;
+}

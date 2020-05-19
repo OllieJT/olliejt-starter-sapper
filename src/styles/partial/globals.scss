@@ -1,0 +1,284 @@
+// global.scss
+@import '../theme.scss';
+
+html,
+body {
+	width: 100%;
+	max-width: 100vw;
+}
+
+html {
+	font-size: 62.5% !important;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-size-adjust: 100%;
+	-webkit-tap-highlight-color: transparent;
+	@media (max-width: 600) {
+		font-size: 56% !important;
+	}
+}
+
+body {
+	font-family: var(--font-family), -apple-system, BlinkMacSystemFont, sans-serif;
+	font-style: normal;
+	@include Content;
+	height: auto;
+	min-height: 100vh;
+	background-color: var(--color-level-lower);
+	position: relative;
+}
+a {
+	display: inline-block;
+	text-decoration: none;
+	cursor: pointer;
+	color: var(--color-secondary-middle);
+	transition: color 0.16s ease-out;
+
+	&:hover,
+	&:focus {
+		color: var(--color-primary-low);
+	}
+}
+
+img.icon {
+	height: 1.25em;
+	width: auto;
+	display: inline-block;
+}
+
+h1 {
+	@include LargeTitle;
+}
+h2 {
+	@include SmallTitle;
+}
+h3 {
+	@include LargeSubtitle;
+}
+h4 {
+	@include SmallSubtitle;
+}
+h5 {
+	@include Headline;
+}
+h6 {
+	@include Label;
+}
+p,
+ol,
+ul,
+blockquote {
+	@include Content;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+iframe,
+figure,
+blockquote {
+	display: block;
+	width: auto;
+	height: auto;
+	max-width: 100%;
+}
+
+blockquote {
+	display: block;
+	padding: var(--size-space-small);
+	background-color: var(--color-level-lower);
+	border: 1px solid var(--color-level-low);
+	quotes: '“' '”' '‘' '’';
+	&::before,
+	&::after {
+		display: inline-block;
+		font-size: 1em;
+		line-height: 1em;
+	}
+	&::before {
+		content: open-quote;
+	}
+	&::after {
+		content: close-quote;
+	}
+}
+
+ul,
+ol,
+li {
+	list-style-type: none;
+}
+
+li {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p {
+		display: inline;
+	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	margin-top: var(--paragraph-spacing);
+	margin-bottom: var(--paragraph-spacing);
+
+	&:first-child {
+		margin-top: 0;
+	}
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	svg {
+		font-size: 1.25em;
+		margin: auto 0;
+	}
+
+	strong,
+	b {
+		font-weight: bolder;
+	}
+
+	sub,
+	sup,
+	small {
+		//. Specified in % so that the sup/sup is the right size relative to the surrounding text
+		font-size: 75%;
+
+		// Zero out the line-height so that it doesn't interfere with the positioning that follows */
+		line-height: 0;
+
+		// Where the magic happens: makes all browsers position the sup/sup properly, relative to the surrounding text */
+		position: relative;
+
+		// Note that if you're using Eric Meyer's reset.css, this is already set and you can remove this rule
+		vertical-align: baseline;
+	}
+	sub {
+		// Move the subscripted text down, but only half as far down as the superscript moved up
+		bottom: -0.25em;
+	}
+	sup {
+		// Move the superscripted text up
+		top: -0.5em;
+	}
+	small {
+		font-size: 85%;
+	}
+
+	mark {
+		display: inline;
+		color: var(--color-tertiary-high);
+		background-color: var(--color-tertiary-low);
+		padding: 0 var(--size-space-smallest);
+		border-radius: var(--radius-small);
+	}
+	code {
+		font-style: italic;
+		color: var(--color-content-high);
+		background-color: var(--color-level-low);
+		padding: 0 0.2em;
+		font-size: 0.8em;
+		line-height: 1em;
+		padding: 0.3em;
+		border-radius: 0.25em;
+		font-weight: bolder;
+	}
+
+	em {
+		font-style: italic;
+		font-style: oblique;
+	}
+	u {
+		text-decoration: underline;
+	}
+	i {
+		font-style: italic;
+	}
+}
+
+.blocks__container {
+	padding: var(--size-space-smallest);
+	@media (max-width: $phone_large) {
+		padding: var(--size-space-smaller);
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	blockquote,
+	ul,
+	ol,
+	.RICHTEXT__CONSTRAINED {
+		max-width: 880px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		text-transform: capitalize;
+		margin-top: 0.66em;
+		margin-bottom: 0.66em;
+	}
+	p {
+		margin-top: 1em;
+		margin-bottom: 1em;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p {
+		&:first-child {
+			margin-top: 0;
+		}
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	/* ulli),
+	olli){
+		list-style-position: inside;
+	} */
+
+	ol,
+	li {
+		list-style: decimal;
+		list-style-position: inside;
+	}
+
+	ul,
+	li {
+		list-style: disc;
+		list-style-position: inside;
+	}
+
+	a {
+		display: inline;
+		text-decoration: underline;
+	}
+}
