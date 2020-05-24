@@ -1,31 +1,25 @@
-import resolve from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
-import commonjs from '@rollup/plugin-commonjs';
 import svelte from 'rollup-plugin-svelte';
-import babel from 'rollup-plugin-babel';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
-import json from '@rollup/plugin-json'; // UNKNOWN
+
+import autoPreprocess from 'svelte-preprocess';
+
+import replace from '@rollup/plugin-replace';
+import babel from 'rollup-plugin-babel';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
-
+import json from '@rollup/plugin-json';
+// Env
+const preprocess = require('./svelte.config.js');
 const mode = process.env.NODE_ENV;
-const dev = mode === 'development';
-const legacy = !!process.env.SAPPER_LEGACY_BUILD;
-
+const isDev = mode === 'development';
+const isLegacy = !!process.env.SAPPER_LEGACY_BUILD;
+// Unknown
 const onwarn = (warning, onwarn) =>
-	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning);
-const dedupe = ['svelte'];
-
-/* SCSS */
-import sveltePreprocess from 'svelte-preprocess';
-const preprocess = sveltePreprocess({
-	scss: {
-		includePaths: ['src'],
-	},
-	postcss: {
-		plugins: [require('autoprefixer')],
-	},
-});
+	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
+	onwarn(warning);
+const dedupe = (importee) => importee === 'svelte' || importee.startsWith('svelte/');
 
 export default {
 	client: {
@@ -36,20 +30,17 @@ export default {
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode),
 			}),
-			svelte({
-				dev,
-				hydratable: true,
-				emitCss: true,
-				preprocess,
-			}),
+			svelte(preprocess),
 			resolve({
+				//preferBuiltins: false,
 				browser: true,
 				dedupe,
+				//mainFields: ['main', 'module'],
 			}),
 			commonjs(),
 			json(),
 
-			legacy &&
+			isLegacy &&
 				babel({
 					extensions: ['.js', '.mjs', '.html', '.svelte'],
 					runtimeHelpers: true,
@@ -73,12 +64,14 @@ export default {
 					],
 				}),
 
-			!dev &&
+			// If we're building for production, minify
+			!isDev &&
 				terser({
 					module: true,
 				}),
 		],
 
+		preserveEntrySignatures: false,
 		onwarn,
 	},
 
@@ -92,11 +85,11 @@ export default {
 			}),
 			svelte({
 				generate: 'ssr',
-				dev,
-				preprocess,
+				dev: isDev,
+				preprocess: autoPreprocess(),
 			}),
 			resolve({
-				dedupe, //dedupe: ['svelte'],
+				dedupe: ['svelte'],
 			}),
 			commonjs(),
 			json(),
@@ -104,7 +97,6 @@ export default {
 		external: Object.keys(pkg.dependencies).concat(
 			require('module').builtinModules || Object.keys(process.binding('natives')),
 		),
-
 		onwarn,
 	},
 
@@ -118,7 +110,7 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(mode),
 			}),
 			commonjs(),
-			!dev && terser(),
+			!isDev && terser(),
 		],
 
 		onwarn,
