@@ -3,8 +3,6 @@
 	//LogRocket.init('TODO');
 
 	import Nav from '../components/Nav.svelte';
-
-	export let segment;
 </script>
 
 <script>
@@ -15,7 +13,7 @@
 	@import '../styles/main.scss';
 </style>
 
-<Nav {segment} />
+<Nav />
 
 <main>
 	<slot />
