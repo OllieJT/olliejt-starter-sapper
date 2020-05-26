@@ -1,118 +1,139 @@
 import svelte from 'rollup-plugin-svelte';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import copy from 'rollup-plugin-copy';
+import del from 'del';
 
-import autoPreprocess from 'svelte-preprocess';
-
-import replace from '@rollup/plugin-replace';
-import babel from 'rollup-plugin-babel';
-import config from 'sapper/config/rollup.js';
-import pkg from './package.json';
-import json from '@rollup/plugin-json';
-// Env
 const preprocess = require('./svelte.config.js');
-const mode = process.env.NODE_ENV;
-const isDev = mode === 'development';
-const isLegacy = !!process.env.SAPPER_LEGACY_BUILD;
-// Unknown
-const onwarn = (warning, onwarn) =>
-	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
-	onwarn(warning);
-const dedupe = (importee) => importee === 'svelte' || importee.startsWith('svelte/');
 
-export default {
-	client: {
-		input: config.client.input(),
-		output: config.client.output(),
+const staticDir = 'static';
+const distDir = 'dist';
+const buildDir = `${distDir}/build`;
+const production = !process.env.ROLLUP_WATCH;
+const bundling = process.env.BUNDLING || production ? 'dynamic' : 'bundle';
+const shouldPrerender =
+	typeof process.env.PRERENDER !== 'undefined' ? process.env.PRERENDER : !!production;
+
+del.sync(distDir + '/**');
+
+function createConfig({ output, inlineDynamicImports, plugins = [] }) {
+	const transform = inlineDynamicImports ? bundledTransform : dynamicTransform;
+
+	return {
+		inlineDynamicImports,
+		input: `src/main.js`,
+		output: {
+			name: 'app',
+			sourcemap: true,
+			...output,
+		},
 		plugins: [
-			replace({
-				'process.browser': true,
-				'process.env.NODE_ENV': JSON.stringify(mode),
+			copy({
+				targets: [
+					{ src: staticDir + '/**/!(__index.html)', dest: distDir },
+					{
+						src: `${staticDir}/__index.html`,
+						dest: distDir,
+						rename: '__app.html',
+						transform,
+					},
+				],
+				copyOnce: true,
+				flatten: false,
 			}),
 			svelte(preprocess),
+
+			// If you have external dependencies installed from
+			// npm, you'll most likely need these plugins. In
+			// some cases you'll need additional configuration â€”
+			// consult the documentation for details:
+			// https://github.com/rollup/rollup-plugin-commonjs
 			resolve({
-				//preferBuiltins: false,
 				browser: true,
-				dedupe,
-				//mainFields: ['main', 'module'],
+				dedupe: (importee) => importee === 'svelte' || importee.startsWith('svelte/'),
 			}),
 			commonjs(),
-			json(),
 
-			isLegacy &&
-				babel({
-					extensions: ['.js', '.mjs', '.html', '.svelte'],
-					runtimeHelpers: true,
-					exclude: ['node_modules/@babel/**'],
-					presets: [
-						[
-							'@babel/preset-env',
-							{
-								targets: '> 0.25%, not dead',
-							},
-						],
-					],
-					plugins: [
-						'@babel/plugin-syntax-dynamic-import',
-						[
-							'@babel/plugin-transform-runtime',
-							{
-								useESModules: true,
-							},
-						],
-					],
-				}),
+			// If we're building for production (npm run build
+			// instead of npm run dev), minify
+			production && terser(),
 
-			// If we're building for production, minify
-			!isDev &&
-				terser({
-					module: true,
-				}),
+			...plugins,
 		],
+		watch: {
+			clearScreen: false,
+		},
+	};
+}
 
-		preserveEntrySignatures: false,
-		onwarn,
+const bundledConfig = {
+	inlineDynamicImports: true,
+	output: {
+		format: 'iife',
+		file: `${buildDir}/bundle.js`,
 	},
-
-	server: {
-		input: config.server.input(),
-		output: config.server.output(),
-		plugins: [
-			replace({
-				'process.browser': false,
-				'process.env.NODE_ENV': JSON.stringify(mode),
-			}),
-			svelte({
-				generate: 'ssr',
-				dev: isDev,
-				preprocess: autoPreprocess(),
-			}),
-			resolve({
-				dedupe: ['svelte'],
-			}),
-			commonjs(),
-			json(),
-		],
-		external: Object.keys(pkg.dependencies).concat(
-			require('module').builtinModules || Object.keys(process.binding('natives')),
-		),
-		onwarn,
-	},
-
-	serviceworker: {
-		input: config.serviceworker.input(),
-		output: config.serviceworker.output(),
-		plugins: [
-			resolve(),
-			replace({
-				'process.browser': true,
-				'process.env.NODE_ENV': JSON.stringify(mode),
-			}),
-			commonjs(),
-			!isDev && terser(),
-		],
-
-		onwarn,
-	},
+	plugins: [!production && serve(), !production && livereload(distDir)],
 };
+
+const dynamicConfig = {
+	inlineDynamicImports: false,
+	output: {
+		format: 'esm',
+		dir: buildDir,
+	},
+	plugins: [!production && livereload(distDir)],
+};
+
+const configs = [createConfig(bundledConfig)];
+if (bundling === 'dynamic') configs.push(createConfig(dynamicConfig));
+if (shouldPrerender) [...configs].pop().plugins.push(prerender());
+export default configs;
+
+function serve() {
+	let started = false;
+	return {
+		writeBundle() {
+			if (!started) {
+				started = true;
+				require('child_process').spawn('npm', ['run', 'serve'], {
+					stdio: ['ignore', 'inherit', 'inherit'],
+					shell: true,
+				});
+			}
+		},
+	};
+}
+
+function prerender() {
+	return {
+		writeBundle() {
+			if (shouldPrerender) {
+				require('child_process').spawn('npm', ['run', 'export'], {
+					stdio: ['ignore', 'inherit', 'inherit'],
+					shell: true,
+				});
+			}
+		},
+	};
+}
+
+function bundledTransform(contents) {
+	return contents.toString().replace(
+		'__SCRIPT__',
+		`
+	<script defer src="/build/bundle.js" ></script>
+	`,
+	);
+}
+
+function dynamicTransform(contents) {
+	return contents.toString().replace(
+		'__SCRIPT__',
+		`
+	<script type="module" defer src="https://unpkg.com/dimport@1.0.0/dist/index.mjs?module" data-main="/build/main.js"></script>
+	<script nomodule defer src="https://unpkg.com/dimport/nomodule" data-main="/build/main.js"></script>
+	`,
+	);
+}
