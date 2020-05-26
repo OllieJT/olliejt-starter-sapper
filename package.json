@@ -23,7 +23,8 @@
 		"node-fetch": "^2.6.0",
 		"polka": "next",
 		"sirv": "^0.4.0",
-		"svelte-apollo": "^0.3.0"
+		"svelte-apollo": "^0.3.0",
+		"svelte": "^3.0.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.0",
@@ -54,8 +55,7 @@
 		"sapper": "^0.27.0",
 		"sirv-cli": "^0.4.4",
 		"svelte-loader": "^2.13.6",
-		"svelte-preprocess": "^3.7.4",
-		"svelte": "^3.0.0"
+		"svelte-preprocess": "^3.7.4"
 	},
 	"repository": {
 		"type": "git",
