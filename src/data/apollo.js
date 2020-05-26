@@ -15,9 +15,9 @@ const middlewareLink = setContext(() => ({
 	},
 }));
 
-const client = new ApolloClient({
-	link: middlewareLink.concat(httpLink),
-	cache: new InMemoryCache(),
-});
+const link = middlewareLink.concat(httpLink);
+const cache = new InMemoryCache();
+
+const client = new ApolloClient({ link, cache });
 
 export default client;
