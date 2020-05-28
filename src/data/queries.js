@@ -1,23 +1,40 @@
 import { gql } from 'apollo-boost';
 
-export const EVERYTHING = gql`
-	# everything needed for route...
-	# (cache misses fall back to loading)
-
-	query shop {
-		shop {
-			name
+export const GET_PAGE = gql`
+	{
+		characters {
+			results {
+				name
+				species
+			}
+		}
+		locations {
+			results {
+				name
+				dimension
+			}
 		}
 	}
 `;
 
-export const SOMETHING = gql`
-	# everything needed for route...
-	# (cache misses fall back to loading)
+export const GET_CHARACTERS = gql`
+	{
+		characters {
+			results {
+				name
+				species
+			}
+		}
+	}
+`;
 
-	query shop {
-		shop {
-			name
+export const GET_LOCATIONS = gql`
+	{
+		locations {
+			results {
+				name
+				dimension
+			}
 		}
 	}
 `;

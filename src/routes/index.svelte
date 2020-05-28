@@ -1,18 +1,11 @@
 <script context="module">
-	import client from '../data/apollo';
-	import { gql } from 'apollo-boost';
+	import client from '../data/apolloClient';
+	import { GET_PAGE, GET_LOCATIONS } from '../data/queries';
 
-	const EVERYTHING = gql`
-		query shop {
-			shop {
-				name
-			}
-		}
-	`;
 	export async function preload() {
 		return {
 			cache: await client.query({
-				query: EVERYTHING,
+				query: GET_PAGE,
 			}),
 		};
 	}
@@ -20,13 +13,18 @@
 
 <script>
 	import { setClient, restore, query } from 'svelte-apollo';
+	import List from '../components/List.svelte';
+
 	export let cache;
-	restore(client, EVERYTHING, cache.data);
-	// TODO Uncommenting this part triggers a 500 error.
-	// setClient(client);
+
+	restore(client, GET_PAGE, cache.data);
+	setClient(client);
+
 	// query a subset of the preloaded (the rest if for Account)
-	const todos = query(client, { query: EVERYTHING });
-	console.log(todos);
+	const locations = query(client, { query: GET_LOCATIONS });
+
+	//console.log('GET_PAGE: ', cache);
+	//console.log('GET_LOCATIONS: ', locations);
 </script>
 
 <style>
@@ -69,23 +67,25 @@
 	<title>Sapper project template</title>
 </svelte:head>
 
-{#await $todos}
+<h3>In Page</h3>
+{#await $locations}
 	<p>Loading...</p>
 {:then result}
-	{#if result.data}
-		<ul>{JSON.stringify(result.data)}</ul>
-	{:else}
-		<p>ERROR!!</p>
-	{/if}
+	<p>Loaded!</p>
+	<pre>{JSON.stringify(result, 0, 2)}</pre>
+{:catch}
+	<p>Error!</p>
 {/await}
 
+<h3>In Component</h3>
+<List />
+<hr />
 <h1>Great success!</h1>
+<p>
+	<strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong>
+</p>
 
 <figure>
 	<img alt="Success Kid" src="successkid.jpg" />
 	<figcaption>Have fun with Sapper!</figcaption>
 </figure>
-
-<p>
-	<strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong>
-</p>
