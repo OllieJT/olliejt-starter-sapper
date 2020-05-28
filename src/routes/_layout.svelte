@@ -1,9 +1,5 @@
 <script>
-	import LogRocket from 'logrocket';
-	LogRocket.init('TODO');
-
 	import Nav from '../components/Nav.svelte';
-
 	export let segment;
 </script>
 
