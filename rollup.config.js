@@ -16,9 +16,6 @@ const mode = process.env.NODE_ENV;
 const isDev = mode === 'development';
 const isLegacy = !!process.env.SAPPER_LEGACY_BUILD;
 // Unknown
-const onwarn = (warning, onwarn) =>
-	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
-	onwarn(warning);
 const dedupe = (importee) => importee === 'svelte' || importee.startsWith('svelte/');
 
 export default {
@@ -72,7 +69,6 @@ export default {
 		],
 
 		preserveEntrySignatures: false,
-		onwarn,
 	},
 
 	server: {
@@ -97,7 +93,6 @@ export default {
 		external: Object.keys(pkg.dependencies).concat(
 			require('module').builtinModules || Object.keys(process.binding('natives')),
 		),
-		onwarn,
 	},
 
 	serviceworker: {
@@ -112,7 +107,5 @@ export default {
 			commonjs(),
 			!isDev && terser(),
 		],
-
-		onwarn,
 	},
 };
