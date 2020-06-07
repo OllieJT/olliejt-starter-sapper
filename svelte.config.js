@@ -5,7 +5,7 @@ const isDev = Boolean(process.env.ROLLUP_WATCH);
 module.exports = {
 	dev: isDev,
 	hydratable: true,
-	emitCss: true,
+	//emitCss: true,
 	//css: (css) => {css.write('dist/build/bundle.css');},
 
 	preprocess: autoPreprocess({
