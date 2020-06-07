@@ -4,6 +4,11 @@
 	"private": true,
 	"license": "UNLICENSED",
 	"version": "0.0.1",
+	"author": {
+		"name": "Ollie Taylor",
+		"email": "contact@olliejt.com",
+		"url": "https://olliejt.com"
+	},
 	"scripts": {
 		"dev": "sapper dev",
 		"build": "ls && sapper build",
