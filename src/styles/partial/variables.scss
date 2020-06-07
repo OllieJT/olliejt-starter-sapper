@@ -1,41 +1,23 @@
 :root {
-	--color-mono-10: hsl(220, 40%, 100%);
-	--color-mono-9: hsl(220, 30%, 90%);
-	--color-mono-8: hsl(220, 25%, 80%);
-	--color-mono-7: hsl(220, 22%, 70%);
-	--color-mono-6: hsl(220, 20%, 60%);
-	--color-mono-5: hsl(220, 20%, 50%);
-	--color-mono-4: hsl(220, 20%, 40%);
-	--color-mono-3: hsl(220, 25%, 30%);
-	--color-mono-2: hsl(230, 30%, 20%);
-	--color-mono-1: hsl(230, 35%, 10%);
-	--color-mono-0: hsl(240, 40%, 5%);
-	--color-mono-mask: hsla(220, 30%, 30%, 0.66);
+	--color-primary-high: hsl(350, 80%, 75%);
+	--color-primary-middle: hsl(350, 100%, 45%);
+	--color-primary-low: hsl(340, 100%, 10%);
+	--color-primary-mask: hsla(355, 100%, 33%, 0.2);
 
-	--color-primary-high: hsl(200, 100%, 10%);
-	--color-primary-middle: hsl(200, 75%, 25%);
-	--color-primary-low: hsl(200, 40%, 60%);
-	--color-primary-mask: hsla(200, 75%, 25%, 0.33);
+	--color-secondary-high: hsl(180, 75%, 80%);
+	--color-secondary-middle: hsl(180, 100%, 40%);
+	--color-secondary-low: hsl(185, 100%, 10%);
+	--color-secondary-mask: hsla(180, 100%, 33%, 0.2);
 
-	--color-secondary-high: hsl(175, 75%, 18%);
-	--color-secondary-middle: hsl(175, 60%, 40%);
-	--color-secondary-low: hsl(175, 50%, 65%);
-	--color-secondary-mask: hsla(175, 60%, 50%, 0.33);
+	--color-red-high: hsl(355, 75%, 85%);
+	--color-red-middle: hsl(355, 100%, 55%);
+	--color-red-low: hsl(345, 100%, 10%);
+	--color-red-mask: hsla(355, 100%, 55%, 0.15);
 
-	--color-tertiary-high: hsl(45, 95%, 30%);
-	--color-tertiary-middle: hsl(45, 95%, 50%);
-	--color-tertiary-low: hsl(45, 95%, 75%);
-	--color-tertiary-mask: hsla(45, 100%, 50%, 0.33);
-
-	--color-red-high: hsl(350, 75%, 85%);
-	--color-red-middle: hsl(350, 100%, 55%);
-	--color-red-low: hsl(340, 100%, 10%);
-	--color-red-mask: hsla(340, 100%, 55%, 0.15);
-
-	--color-marine-low: hsl(215, 60%, 15%);
-	--color-marine-middle: hsl(210, 70%, 60%);
-	--color-marine-high: hsl(215, 100%, 85%);
-	--color-marine-mask: hsla(215, 100%, 45%, 0.15);
+	--color-blue-high: hsl(215, 100%, 85%);
+	--color-blue-middle: hsl(210, 70%, 60%);
+	--color-blue-low: hsl(215, 60%, 15%);
+	--color-blue-mask: hsla(215, 100%, 45%, 0.15);
 
 	--color-green-high: hsl(160, 74%, 85%);
 	--color-green-middle: hsl(160, 100%, 45%);
@@ -47,24 +29,24 @@
 	--color-yellow-low: hsl(40, 100%, 10%);
 	--color-yellow-mask: hsla(50, 100%, 45%, 0.2);
 
-	--color-content-high: var(--color-mono-0);
-	--color-content-middle: var(--color-mono-3);
-	--color-content-low: var(--color-mono-5);
+	--color-content-high: hsl(215, 8%, 99%);
+	--color-content-middle: hsl(215, 8%, 75%);
+	--color-content-low: hsl(215, 8%, 50%);
 
-	--color-level-higher: var(--color-mono-5);
-	--color-level-high: var(--color-mono-6);
-	--color-level-middle: var(--color-mono-7);
-	--color-level-low: var(--color-mono-8);
-	--color-level-lower: var(--color-mono-9);
-	--color-level-bottom: var(--color-mono-10);
-	--color-level-mask: var(--color-mono-low-mask);
+	--color-level-higher: hsl(230, 5%, 40%);
+	--color-level-high: hsl(230, 5%, 25%);
+	--color-level-middle: hsl(230, 5%, 15%);
+	--color-level-low: hsl(230, 5%, 10%);
+	--color-level-lower: hsl(230, 5%, 5%);
+	--color-level-bottom: hsl(230, 5%, 1%);
+	--color-level-mask: hsla(240, 2%, 8%, 0.4);
+	--color-level-scrim: hsla(240, 2%, 8%, 0.8);
 
-	--font-family: 'Sen'; // Heebo, Yantramanav, Ubuntu, Lato
+	--font-family: '';
 
 	--font-weight-regular: 400;
 	--font-weight-medium: 700;
 	--font-weight-bold: 800;
-	--paragraph-spacing: 0em;
 
 	--size-container-main: 120rem;
 	--size-container-content: 88rem;
