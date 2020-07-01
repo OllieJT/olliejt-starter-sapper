@@ -1,13 +1,8 @@
 const autoPreprocess = require('svelte-preprocess');
 const autoprefixer = require('autoprefixer');
-const isDev = Boolean(process.env.ROLLUP_WATCH);
+//const isDev = Boolean(process.env.ROLLUP_WATCH);
 
 module.exports = {
-	dev: isDev,
-	hydratable: true,
-	//emitCss: true,
-	//css: (css) => {css.write('dist/build/bundle.css');},
-
 	preprocess: autoPreprocess({
 		preserve: ['ld+json'],
 		scss: {
